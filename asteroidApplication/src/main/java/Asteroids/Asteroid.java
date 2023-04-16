@@ -10,7 +10,7 @@ import java.util.List;
 import javafx.scene.shape.Shape;
 
 public class Asteroid extends SpaceObject {
-    public static final double largeRatio = 5, mediumRatio = 3, smallRatio = 1;
+    public static final double LARGE_RATIO = 5, MEDIUM_RATIO = 3, SMALL_RATIO = 1;
     public Asteroid(double x, double y, double ratio) {
         super(x, y);
         this.ratio = ratio;
@@ -20,9 +20,9 @@ public class Asteroid extends SpaceObject {
         this.angle = rand.nextDouble() * 360;
 
         // Set the velocity based on the size
-        if (ratio == largeRatio) {           // Large Asteroids
+        if (ratio == LARGE_RATIO) {           // Large Asteroids
             speed = 1;
-        } else if (ratio == mediumRatio) {      // Medium Asteroids
+        } else if (ratio == MEDIUM_RATIO) {      // Medium Asteroids
             speed = 2;
         } else {                      // Small Asteroids
             speed = 3;
@@ -62,18 +62,18 @@ public class Asteroid extends SpaceObject {
 
     public List<Asteroid> destroyed(double ratio, Pane pane, double destroyedSpeed) {
         List<Asteroid> newAsteroids = new ArrayList<>();
-        if (ratio == largeRatio) {
+        if (ratio == LARGE_RATIO) {
             // Create two medium-sized asteroids
             for (int i = 0; i < 2; i++) {
-                Asteroid asteroid = new Asteroid(super.x, super.y, mediumRatio);
+                Asteroid asteroid = new Asteroid(super.x, super.y, MEDIUM_RATIO);
                 asteroid.setSpeed(destroyedSpeed + Math.random());
                 asteroid.addToPane(pane);
                 newAsteroids.add(asteroid);
             }
-        } else if (ratio == mediumRatio) {
+        } else if (ratio == MEDIUM_RATIO) {
             // Create two small-sized asteroids
             for (int i = 0; i < 2; i++) {
-                Asteroid asteroid = new Asteroid(super.x, super.y, smallRatio);
+                Asteroid asteroid = new Asteroid(super.x, super.y, SMALL_RATIO);
                 asteroid.setSpeed(destroyedSpeed + Math.random());
                 asteroid.addToPane(pane);
                 newAsteroids.add(asteroid);

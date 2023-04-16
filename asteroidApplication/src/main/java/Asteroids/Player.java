@@ -19,9 +19,10 @@ public class Player extends SpaceObject {
     private List<Asteroid> asteroids = new ArrayList<>();
     private AlienShip alienShip;
     private List<Bullet> alienShipBullets;
-    private static final int bulletLimit = 50; // Maximum number of bullets on the screen at the same time
-    private static final double playerMaxSpeed = 35; // Maximum speed for the player
-    public static final long playerFiringInterval = 300; // Delay between shots in milliseconds
+    private static final int BULLET_LIMIT = 50; // Maximum number of bullets on the screen at the same time
+    private static final double PLAYER_MAX_SPEED = 35; // Maximum speed for the player
+    public static final long PLAYER_FIRING_INTERVAL = 300; // Delay between shots in milliseconds
+    public static int SAFE_DISTANCE = 350; // Safe Distance for Hyperspace Jump
 
     public Player(double x, double y, Pane pane, Scene scene) {
         super(x, y);
@@ -103,9 +104,9 @@ public class Player extends SpaceObject {
 
         // Limit the player's speed
         double currentSpeed = Math.sqrt(dx * dx + dy * dy);
-        if (currentSpeed > playerMaxSpeed) {
-            dx = (dx / currentSpeed) * playerMaxSpeed;
-            dy = (dy / currentSpeed) * playerMaxSpeed;
+        if (currentSpeed > PLAYER_MAX_SPEED) {
+            dx = (dx / currentSpeed) * PLAYER_MAX_SPEED;
+            dy = (dy / currentSpeed) * PLAYER_MAX_SPEED;
         }
     }
 
@@ -115,9 +116,9 @@ public class Player extends SpaceObject {
 
         // Limit the player's speed
         double currentSpeed = Math.sqrt(dx * dx + dy * dy);
-        if (currentSpeed > playerMaxSpeed) {
-            dx = (dx / currentSpeed) * playerMaxSpeed;
-            dy = (dy / currentSpeed) * playerMaxSpeed;
+        if (currentSpeed > PLAYER_MAX_SPEED) {
+            dx = (dx / currentSpeed) * PLAYER_MAX_SPEED;
+            dy = (dy / currentSpeed) * PLAYER_MAX_SPEED;
         }
     }
 
@@ -130,7 +131,7 @@ public class Player extends SpaceObject {
     }
 
     public boolean canFire(int bulletCount) {
-        return bulletCount < bulletLimit;
+        return bulletCount < BULLET_LIMIT;
     }
 
 
@@ -145,8 +146,8 @@ public class Player extends SpaceObject {
     }
 
     public void resetPosition() {
-        x = Game.pWidth / 2;
-        y = Game.pHeight / 2;
+        x = Game.PANE_WIDTH / 2;
+        y = Game.PANE_HEIGHT / 2;
         dx = 0;
         dy = 0;
         shape.setLayoutX(x);
@@ -184,8 +185,8 @@ public class Player extends SpaceObject {
     public Pair<Double, Double> getSafeCoordinates(double safeDistance) {
         double x, y;
         do {
-            x = Math.random() * Game.pWidth;
-            y = Math.random() * Game.pHeight;
+            x = Math.random() * Game.PANE_WIDTH;
+            y = Math.random() * Game.PANE_HEIGHT;
         } while (!isSafe(x, y, this.getShape().getLayoutX(), this.getShape().getLayoutY(), safeDistance));
         return new Pair<>(x, y);
     }
@@ -199,13 +200,13 @@ public class Player extends SpaceObject {
         double a, b;
         boolean safeToJump;
         do {
-            a = Math.random() * Game.pWidth;
-            b = Math.random() * Game.pHeight;
-            safeToJump = safeAsteroid(a, b, asteroids, 200);
+            a = Math.random() * Game.PANE_WIDTH;
+            b = Math.random() * Game.PANE_HEIGHT;
+            safeToJump = safeAsteroid(a, b, asteroids, SAFE_DISTANCE);
 
             if (alienShip != null) {
                 double alienDistance = Math.sqrt(Math.pow(a - alienShip.getX(), 2) + Math.pow(b - alienShip.getY(), 2));
-                if (alienDistance < 200) {
+                if (alienDistance < SAFE_DISTANCE) {
                     safeToJump = false;
                 }
             }
@@ -213,7 +214,7 @@ public class Player extends SpaceObject {
             if (alienShipBullets != null) {
                 for (Bullet bullet : alienShipBullets) {
                     double bulletDistance = Math.sqrt(Math.pow(a - bullet.getX(), 2) + Math.pow(b - bullet.getY(), 2));
-                    if (bulletDistance < 100) {
+                    if (bulletDistance < SAFE_DISTANCE) {
                         safeToJump = false;
                         break;
                     }

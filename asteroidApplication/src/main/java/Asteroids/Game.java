@@ -30,12 +30,12 @@ import java.util.*;
 public class Game extends Application {
     private Scene mainScene;
     private Scene gameScene;
-    public static final double pWidth = 1200, pHeight = 800;
-    public static final int initialLives = 3;
-    public static final double alienShipFiringInterval = 2, alienShipInterval = 20000; // Frequency of alienShip firing and generation
-    private static final int largeAsteroidScore = 900, mediumAsteroidScore = 600, smallAsteroidScore = 300, alienShipScore = 1000, bonusLifeScore = 25000;
-    private double centerX = pWidth / 2, centerY = pHeight / 2;
-    private int lives = initialLives, extraLives = 0;
+    public static final double PANE_WIDTH = 1200, PANE_HEIGHT = 800;
+    public static final int INITIAL_LIVES = 3;
+    public static final double ALIEN_SHIP_FIRING_INTERVAL = 2, ALIEN_SHIP_INTERVAL = 20000; // Frequency of alienShip firing and generation
+    private static final int LARGE_ASTEROID_SCORE = 900, MEDIUM_ASTEROID_SCORE = 600, SMALL_ASTEROID_SCORE = 300, ALIEN_SHIP_SCORE = 1000, BONUS_LIFE_SCORE = 25000;
+    private double centerX = PANE_WIDTH / 2, centerY = PANE_HEIGHT / 2;
+    private int lives = INITIAL_LIVES, extraLives = 0;
     private int level = 1;
     private int score = 0;
     private double lastAlienShipTime = 0.0;
@@ -77,7 +77,7 @@ public class Game extends Application {
 
     private void setScoreText(Pane pane) {
         if (scoreText == null) {
-            scoreText = createText("Score: " + score, pWidth - 150, 30, new Font("Courier New", 20), null, false);
+            scoreText = createText("Score: " + score, PANE_WIDTH - 150, 30, new Font("Courier New", 20), null, false);
         } else {
             scoreText.setText("Score: " + score);
         }
@@ -103,7 +103,7 @@ public class Game extends Application {
 
             // Stop the game loop
             timer.stop();
-            int tmpScore = score + extraLives * bonusLifeScore;
+            int tmpScore = score + extraLives * BONUS_LIFE_SCORE;
             // Show input dialog for the player to enter their name
             Platform.runLater(() -> {
                 System.out.println("Score = " + score);
@@ -142,10 +142,10 @@ public class Game extends Application {
     }
 
     private void updateLives(Pane gamePane, Player player) {
-        if (score >= bonusLifeScore) {
+        if (score >= BONUS_LIFE_SCORE) {
             lives++;
             extraLives++;
-            score -= bonusLifeScore; // Deduct the points used for the extra life
+            score -= BONUS_LIFE_SCORE; // Deduct the points used for the extra life
             setScoreText(gamePane);
 
             // Create a new life indicator and add it to the game pane
@@ -162,9 +162,9 @@ public class Game extends Application {
         Random random = new Random();
 
         for (int i = 0; i < 10; i++) {
-            double x = random.nextDouble() * pWidth;
-            double y = random.nextDouble() * pHeight;
-            double ratio = Asteroid.smallRatio + random.nextDouble() * (Asteroid.largeRatio - Asteroid.smallRatio);
+            double x = random.nextDouble() * PANE_WIDTH;
+            double y = random.nextDouble() * PANE_HEIGHT;
+            double ratio = Asteroid.SMALL_RATIO + random.nextDouble() * (Asteroid.LARGE_RATIO - Asteroid.SMALL_RATIO);
 
             Asteroid asteroid = new Asteroid(x, y, ratio);
             asteroid.addToPane(pane);
@@ -194,9 +194,9 @@ public class Game extends Application {
             double y = safeCoordinates.getValue();
 
             // Create 3 types of asteroids;
-            double[] ratios = {Asteroid.smallRatio, Asteroid.mediumRatio, Asteroid.largeRatio};
+            double[] ratios = {Asteroid.SMALL_RATIO, Asteroid.MEDIUM_RATIO, Asteroid.LARGE_RATIO};
             double ratio = ratios[(int) (Math.random() * ratios.length)];
-            if (level == 1) ratio = Asteroid.largeRatio;
+            if (level == 1) ratio = Asteroid.LARGE_RATIO;
             Asteroid asteroid = new Asteroid(x, y, ratio);
 
             // Set Asteroid speed according to the level
@@ -247,7 +247,7 @@ public class Game extends Application {
     private void showHallOfFame(Stage stage) {
         Pane hallOfFamePane = new Pane();
         hallOfFamePane.setStyle("-fx-background-color: black;");
-        Scene hallOfFameScene = new Scene(hallOfFamePane, pWidth, pHeight);
+        Scene hallOfFameScene = new Scene(hallOfFamePane, PANE_WIDTH, PANE_HEIGHT);
 
         // Add title
         Text hallOfFameTitle = createText("High Scores", centerX, 100, new Font("Impact", 50), null, false);
@@ -272,8 +272,8 @@ public class Game extends Application {
     private void showControls(Stage stage) {
         Pane controlsPane = new Pane();
         controlsPane.setStyle("-fx-background-color: black;");
-        controlsPane.setPrefSize(pWidth, pHeight);
-        Scene controlsScene = new Scene(controlsPane, pWidth, pHeight);
+        controlsPane.setPrefSize(PANE_WIDTH, PANE_HEIGHT);
+        Scene controlsScene = new Scene(controlsPane, PANE_WIDTH, PANE_HEIGHT);
 
         Text controlsText1 = createText("Key Bindings", centerX, 100, new Font("Impact", 50), null, false);
         Text controlsText2 = createText("UP / W      Apply Thrust   ", centerX, 200, new Font("Courier New", 30), null, false);
@@ -292,7 +292,6 @@ public class Game extends Application {
         stage.setScene(controlsScene);
 
     }
-
 
     private void removeLife() {
         if (lives > 0) {
@@ -317,7 +316,7 @@ public class Game extends Application {
     }
 
     public void resetVal() {
-        lives = initialLives;
+        lives = INITIAL_LIVES;
         extraLives = 0;
         score = 0;
         level = 1;
@@ -329,8 +328,8 @@ public class Game extends Application {
         double sx = safeCoordinates.getKey();
         double sy = safeCoordinates.getValue();
 
-        // Generate alienShip every (alienShipInterval + Math.random() * 1000) milliseconds
-        if (alienShip == null && System.currentTimeMillis() - lastAlienShipTime >= alienShipInterval + Math.random() * 1000) {
+        // Generate alienShip every (ALIEN_SHIP_INTERVAL + Math.random() * 1000) milliseconds
+        if (alienShip == null && System.currentTimeMillis() - lastAlienShipTime >= ALIEN_SHIP_INTERVAL + Math.random() * 1000) {
             lastAlienShipTime = System.currentTimeMillis();
             alienShip = new AlienShip(sx, sy);
             alienShip.addToPane(pane);
@@ -349,9 +348,9 @@ public class Game extends Application {
             alienShipFireTimeline.stop();
         }
 
-        // Fire towards the player every alienShipFiringInterval seconds
+        // Fire towards the player every ALIEN_SHIP_FIRING_INTERVAL seconds
         if (alienShip != null) {
-            alienShipFireTimeline = new Timeline(new KeyFrame(Duration.seconds(alienShipFiringInterval), event -> {
+            alienShipFireTimeline = new Timeline(new KeyFrame(Duration.seconds(ALIEN_SHIP_FIRING_INTERVAL), event -> {
                 if (alienShip != null) {
                     Bullet bullet = alienShip.fire(pane, player);
                     alienShipBullets.add(bullet);
@@ -387,14 +386,14 @@ public class Game extends Application {
 
         // Create the game scene
         Pane gamePane = new Pane();
-        gamePane.setPrefSize(pWidth, pHeight);
-        gameScene = new Scene(gamePane, pWidth, pHeight);
+        gamePane.setPrefSize(PANE_WIDTH, PANE_HEIGHT);
+        gameScene = new Scene(gamePane, PANE_WIDTH, PANE_HEIGHT);
         stage.setScene(gameScene);
         gamePane.setStyle("-fx-background-color: black;");
 
 
         // Create the player and add it to the game pane
-        Player player = new Player(pWidth / 2, pHeight / 2, gamePane, gameScene);
+        Player player = new Player(PANE_WIDTH / 2, PANE_HEIGHT / 2, gamePane, gameScene);
         player.addToPane(gamePane);
         player.getShape().requestFocus();
 
@@ -421,7 +420,7 @@ public class Game extends Application {
                 // Call the fire method and add the returned bullet to the playerBullets list
                 if (player.isFiring() && player.canFire(playerBullets.size())) {
                     long now = System.currentTimeMillis();
-                    if (now - player.lastFiringTime > player.playerFiringInterval) {
+                    if (now - player.lastFiringTime > player.PLAYER_FIRING_INTERVAL) {
                         playerBullets.add(player.fire(gamePane));
                         player.lastFiringTime = now;
                     }
@@ -458,7 +457,7 @@ public class Game extends Application {
                         }
 
                         // Update the score
-                        score += alienShipScore;
+                        score += ALIEN_SHIP_SCORE;
                         setScoreText(gamePane);
 
                         // Check if successful
@@ -481,12 +480,12 @@ public class Game extends Application {
 
                             // Calculate and update the score
                             int asteroidScore = 0;
-                            if (asteroid.getRatio() == Asteroid.largeRatio) {
-                                asteroidScore = largeAsteroidScore;
-                            } else if (asteroid.getRatio() == Asteroid.mediumRatio) {
-                                asteroidScore = mediumAsteroidScore;
-                            } else if (asteroid.getRatio() == Asteroid.smallRatio) {
-                                asteroidScore = smallAsteroidScore;
+                            if (asteroid.getRatio() == Asteroid.LARGE_RATIO) {
+                                asteroidScore = LARGE_ASTEROID_SCORE;
+                            } else if (asteroid.getRatio() == Asteroid.MEDIUM_RATIO) {
+                                asteroidScore = MEDIUM_ASTEROID_SCORE;
+                            } else if (asteroid.getRatio() == Asteroid.SMALL_RATIO) {
+                                asteroidScore = SMALL_ASTEROID_SCORE;
                             }
                             score += asteroidScore;
                             setScoreText(gamePane);
@@ -588,7 +587,7 @@ public class Game extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Pane mainPane = new Pane();
-        mainScene = new Scene(mainPane, pWidth, pHeight);
+        mainScene = new Scene(mainPane, PANE_WIDTH, PANE_HEIGHT);
         mainPane.setStyle("-fx-background-color: black;");
 
         // Add background asteroids

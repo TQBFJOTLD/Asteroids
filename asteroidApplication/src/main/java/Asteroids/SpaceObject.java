@@ -95,13 +95,13 @@ public class SpaceObject {
 
         // Check if the object has flown outside the game pane
         if (x < -size * ratio) {
-            x = Game.pWidth + (-size * ratio);
-        } else if (x > Game.pWidth - (-size * ratio)) {
+            x = Game.PANE_WIDTH + (-size * ratio);
+        } else if (x > Game.PANE_WIDTH - (-size * ratio)) {
             x = -size * ratio;
         }
         if (y < -size * ratio) {
-            y = Game.pHeight + (-size * ratio);
-        } else if (y > Game.pHeight - (-size * ratio)) {
+            y = Game.PANE_HEIGHT + (-size * ratio);
+        } else if (y > Game.PANE_HEIGHT - (-size * ratio)) {
             y = -size * ratio;
         }
 
