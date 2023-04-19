@@ -1,8 +1,4 @@
-test6,212000
-test4,67700
-test7,23400
-test5,17900
-test2,5900
-test3,4400
-aaa,4300
-test,1000
+YCC,8000
+CCE,1800
+AAA,0
+AAA,0
